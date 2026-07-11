@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: appointment-service
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:mykare;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        '[dialect]': org.hibernate.dialect.H2Dialect
+        '[format_sql]': false
+        jdbc:
+          '[batch_size]': 20
+          '[fetch_size]': 50
+        '[order_inserts]': true
+        '[order_updates]': true
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+server:
+  port: 8087
+
+app:
+  kafka:
+    appointment-topic: ${APPOINTMENT_TOPIC:appointment-events}
+  jwt:
+    secret: ${JWT_SECRET:mykare-demo-secret-key-change-this-value}
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:120}

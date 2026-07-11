@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MyKare Appointment System</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fb 0%, #e8ecf1 100%);
+      color: #172033;
+      line-height: 1.5;
+    }
+    header {
+      background: linear-gradient(135deg, #0f766e 0%, #0d5a57 100%);
+      color: white;
+      padding: 30px 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+    }
+    header div {
+      opacity: 0.95;
+      font-size: 14px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 24px;
+      padding: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    section {
+      background: white;
+      border: 1px solid #d8dee9;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease;
+    }
+    section:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+    h2 {
+      margin: 0 0 18px 0;
+      color: #0f766e;
+      font-size: 18px;
+      border-bottom: 2px solid #0f766e;
+      padding-bottom: 10px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 14px;
+      color: #334155;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #0f766e;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+      background: #f0fffe;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+    button {
+      width: 100%;
+      padding: 12px 16px;
+      margin-top: 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    button:not(.secondary) {
+      background: linear-gradient(135deg, #0f766e 0%, #0d5a57 100%);
+      color: white;
+    }
+    button:not(.secondary):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+    }
+    button:not(.secondary):active {
+      transform: translateY(0);
+    }
+    button.secondary {
+      background: #f0f4f8;
+      color: #334155;
+      border: 1.5px solid #cbd5e1;
+    }
+    button.secondary:hover {
+      background: #e8ecf1;
+      border-color: #94a3b8;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    pre {
+      min-height: 150px;
+      max-height: 400px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: #0f172a;
+      color: #d1fae5;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 12px;
+      font-size: 12px;
+      border: 1px solid #1e293b;
+    }
+    .status {
+      min-height: 28px;
+      padding: 8px 12px;
+      margin-top: 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      animation: slideIn 0.3s ease;
+    }
+    .status.loading {
+      color: #f59e0b;
+      background: #fffbeb;
+      border-left: 3px solid #f59e0b;
+    }
+    .status.success {
+      color: #059669;
+      background: #ecfdf5;
+      border-left: 3px solid #059669;
+    }
+    .status.error {
+      color: #dc2626;
+      background: #fef2f2;
+      border-left: 3px solid #dc2626;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .button-group button {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>💊 MyKare Appointment System</h1>
+  <div>Book and manage medical appointments with real-time notification processing</div>
+</header>
+<main>
+  <section>
+    <h2>🔐 Authentication</h2>
+    <label>Full Name</label>
+    <input id="name" value="Sanjeev" placeholder="Enter your full name">
+    <label>Email Address</label>
+    <input id="email" type="email" value="sanjeev@example.com" placeholder="you@example.com">
+    <label>Password</label>
+    <input id="password" type="password" value="password123" placeholder="Secure password">
+    <label>Role</label>
+    <select id="role">
+      <option value="PATIENT">👤 Patient</option>
+      <option value="DOCTOR">👨‍⚕️ Doctor</option>
+      <option value="ADMIN">👨‍💼 Administrator</option>
+    </select>
+    <div class="button-group">
+      <button onclick="registerUser()">Register</button>
+      <button class="secondary" onclick="loginUser()">Login</button>
+    </div>
+    <div id="authStatus" class="status"></div>
+  </section>
+
+  <section>
+    <h2>📅 Book Appointment</h2>
+    <label>Patient Name</label>
+    <input id="patientName" value="Sanjeev" placeholder="Your full name">
+    <label>Patient Email</label>
+    <input id="patientEmail" type="email" value="sanjeev@example.com" placeholder="your@email.com">
+    <label>Doctor Name</label>
+    <input id="doctorName" value="Dr Rao" placeholder="e.g., Dr Rao, Dr Sharma">
+    <label>Appointment Date & Time</label>
+    <input id="appointmentTime" type="datetime-local">
+    <label>Reason for Visit</label>
+    <input id="reason" value="Fever" placeholder="Chief complaint">
+    <label>Additional Notes</label>
+    <textarea id="notes" placeholder="Any additional information for the doctor">First visit</textarea>
+    <div class="button-group">
+      <button onclick="bookAppointment()">✓ Book Now</button>
+      <button class="secondary" onclick="loadAppointments()">🔄 Refresh</button>
+    </div>
+    <div id="bookingStatus" class="status"></div>
+  </section>
+
+  <section>
+    <h2>🕐 Available Slots</h2>
+    <label>Doctor Name</label>
+    <input id="slotDoctor" value="Dr Rao" placeholder="Enter doctor name">
+    <label>Date</label>
+    <input id="slotDate" type="date">
+    <button onclick="loadSlots()">Find Available Slots</button>
+    <div id="slotStatus" class="status"></div>
+    <pre id="slotsOutput"></pre>
+  </section>
+
+  <section>
+    <h2>📋 Appointments & History</h2>
+    <label>Appointment ID</label>
+    <input id="appointmentId" placeholder="Enter appointment ID to manage">
+    <div class="button-group">
+      <button onclick="cancelAppointment()">❌ Cancel</button>
+      <button class="secondary" onclick="loadLogs()">📜 View History</button>
+    </div>
+    <div id="historyStatus" class="status"></div>
+    <pre id="appointmentsOutput"></pre>
+  </section>
+</main>
+
+<script>
+  let token = "";
+
+  const field = (id) => document.getElementById(id);
+
+  const now = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  now.setMinutes(0, 0, 0);
+  field("appointmentTime").value = now.toISOString().slice(0, 16);
+  field("slotDate").value = now.toISOString().slice(0, 10);
+
+  function setStatus(id, message, type = "") {
+    const el = field(id);
+    el.textContent = message;
+    el.className = "status " + type;
+  }
+
+  function print(id, data) {
+    field(id).textContent = JSON.stringify(data, null, 2);
+  }
+
+  async function request(path, options = {}) {
+    const headers = {"Content-Type": "application/json", ...(options.headers || {})};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    try {
+      const response = await fetch(path, {...options, headers});
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : null;
+      if (!response.ok) {
+        throw new Error(data?.message || `${response.status}: ${response.statusText}`);
+      }
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function registerUser() {
+    if (!field("email").value || !field("password").value) {
+      setStatus("authStatus", "⚠️ Please fill all fields", "error");
+      return;
+    }
+    setStatus("authStatus", "⏳ Registering user...", "loading");
+    try {
+      const data = await request("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          name: field("name").value.trim(),
+          email: field("email").value.trim(),
+          password: field("password").value,
+          role: field("role").value
+        })
+      });
+      token = data.token;
+      setStatus("authStatus", "✅ Registered and logged in successfully!", "success");
+    } catch (error) {
+      setStatus("authStatus", `❌ ${error.message}`, "error");
+    }
+  }
+
+  async function loginUser() {
+    if (!field("email").value || !field("password").value) {
+      setStatus("authStatus", "⚠️ Please enter email and password", "error");
+      return;
+    }
+    setStatus("authStatus", "⏳ Logging in...", "loading");
+    try {
+      const data = await request("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: field("email").value.trim(),
+          password: field("password").value
+        })
+      });
+      token = data.token;
+      setStatus("authStatus", "✅ Logged in successfully!", "success");
+    } catch (error) {
+      setStatus("authStatus", `❌ ${error.message}`, "error");
+    }
+  }
+
+  async function bookAppointment() {
+    if (!token) {
+      setStatus("bookingStatus", "❌ Please login first", "error");
+      return;
+    }
+    if (!field("appointmentTime").value) {
+      setStatus("bookingStatus", "⚠️ Please select appointment date and time", "error");
+      return;
+    }
+    setStatus("bookingStatus", "⏳ Booking appointment...", "loading");
+    try {
+      const data = await request("/api/appointments", {
+        method: "POST",
+        body: JSON.stringify({
+          patientName: field("patientName").value.trim(),
+          patientEmail: field("patientEmail").value.trim(),
+          doctorName: field("doctorName").value.trim(),
+          appointmentTime: field("appointmentTime").value,
+          reason: field("reason").value.trim(),
+          notes: field("notes").value
+        })
+      });
+      field("appointmentId").value = data.id;
+      setStatus("bookingStatus", `✅ Appointment #${data.id} booked! Notification processing started...`, "success");
+      print("appointmentsOutput", data);
+    } catch (error) {
+      setStatus("bookingStatus", `❌ ${error.message}`, "error");
+    }
+  }
+
+  async function loadAppointments() {
+    setStatus("bookingStatus", "⏳ Fetching appointments...", "loading");
+    try {
+      const data = await request("/api/appointments");
+      setStatus("bookingStatus", `✅ Found ${data.length} appointment(s)`, "success");
+      print("appointmentsOutput", data);
+    } catch (error) {
+      setStatus("bookingStatus", `❌ ${error.message}`, "error");
+    }
+  }
+
+  async function loadSlots() {
+    if (!field("slotDate").value) {
+      setStatus("slotStatus", "⚠️ Please select a date", "error");
+      return;
+    }
+    setStatus("slotStatus", "⏳ Fetching available slots...", "loading");
+    try {
+      const data = await request(`/api/appointments/available-slots?doctorName=${encodeURIComponent(field("slotDoctor").value)}&date=${field("slotDate").value}`);
+      setStatus("slotStatus", `✅ Found ${data.length} available slot(s)`, "success");
+      print("slotsOutput", data);
+    } catch (error) {
+      setStatus("slotStatus", `❌ ${error.message}`, "error");
+    }
+  }
+
+  async function cancelAppointment() {
+    if (!field("appointmentId").value) {
+      setStatus("historyStatus", "⚠️ Please enter appointment ID", "error");
+      return;
+    }
+    if (!confirm("Are you sure you want to cancel this appointment?")) return;
+    
+    setStatus("historyStatus", "⏳ Cancelling appointment...", "loading");
+    try {
+      const data = await request(`/api/appointments/${field("appointmentId").value}/cancel`, {method: "PATCH"});
+      setStatus("historyStatus", "✅ Appointment cancelled successfully", "success");
+      print("appointmentsOutput", data);
+    } catch (error) {
+      setStatus("historyStatus", `❌ ${error.message}`, "error");
+    }
+  }
+
+  async function loadLogs() {
+    if (!field("appointmentId").value) {
+      setStatus("historyStatus", "⚠️ Please enter appointment ID", "error");
+      return;
+    }
+    setStatus("historyStatus", "⏳ Fetching appointment history...", "loading");
+    try {
+      const data = await request(`/api/appointments/${field("appointmentId").value}/logs`);
+      setStatus("historyStatus", `✅ History loaded (${data.length} events)`, "success");
+      print("appointmentsOutput", data);
+    } catch (error) {
+      setStatus("historyStatus", `❌ ${error.message}`, "error");
+    }
+  }
+</script>
+</body>
+</html>
